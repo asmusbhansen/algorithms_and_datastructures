@@ -10,7 +10,7 @@ sys.setrecursionlimit(10**6)
 
 
 
-# 3 partition implementation of quick sort
+# 3 partition implementation of quick sort -Faster than normal quicksort for many duplicate keys - Otherwise slower
 
 def exch(l, i, j):
     li = l[i]
@@ -85,4 +85,4 @@ assert is_sorted(arr_sorted)
 #plt.hist(gts, label='gts',alpha=0.5)
 #plt.legend()
 
-time_sort(sort, sort_kwargs={'lo':0, 'hi':-1}, duplicates=False, start=5, stop=12, tests=10)
+time_sort(sort, sort_kwargs={'lo':0, 'hi':-1}, duplicates=True, start=5, stop=12, tests=10)
