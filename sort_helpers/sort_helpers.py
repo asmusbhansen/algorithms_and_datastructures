@@ -2,6 +2,7 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
+
 # Timing test
 
 def is_sorted(l):
@@ -19,7 +20,7 @@ def time_sort(sort_func, sort_kwargs={}, duplicates=True, start=4, stop=14, test
     
     
     N = np.array([2**n for n in np.arange(start, stop)])
-    max_val = N[-1]
+    max_val = 100#N[-1]
     results = np.zeros((tests, len(N)))
 
     for n, val in enumerate(N):
@@ -30,7 +31,9 @@ def time_sort(sort_func, sort_kwargs={}, duplicates=True, start=4, stop=14, test
                 arr = np.random.randint(0,max_val, val)
             else:
                 arr = np.arange(val)
-                np.random.shuffle(arr)
+
+            np.random.shuffle(arr)
+
             #print(f'arr: {arr}')
             time_start = time.time()
             arr_sorted = sort_func(arr, **sort_kwargs)
