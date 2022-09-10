@@ -3,17 +3,14 @@ import time
 
 class Node:
 
-    key = None
-    val = None
-    left = None
-    right = None
-    count = 0
-
-    def __init__(self, key=None, val=None, count=None):
+    def __init__(self, key=None, left=None, right=None, val=None, count=0, color='black'):
 
         self.key = key
         self.val = val
         self.count = count
+        self.left = left
+        self.right = right
+        self.color = color
 
     def compare_to(self, key):
         
@@ -36,7 +33,7 @@ class Node:
         except:
             rkey = None
 
-        return f'key = {self.key}, left key = {lkey}, right key = {rkey}'
+        return f'key = {self.key}, left key = {lkey}, right key = {rkey}, color = {self.color}'
     
 
 class BinarySearchTree:
@@ -97,21 +94,27 @@ class BinarySearchTree:
         if x is None:
             return Node(key=key, val=val, count=1)
         
+        x = self.put_cmp(x, key, val)
+
+        x.count = self.size_(x.left) + self.size_(x.right) + 1
+
+        return x
+
+    def put_cmp(self, x, key, val):
+
         cmp = x.compare_to(key)
 
-        #print(f'Node key {x.key}, insert key {key}, cmp: {cmp}')
-
         # If x is less than key - Put left
+        print(f'Node key {x.key}, new key {key}, cmp {cmp}')
         if cmp < 0:
-            #print(f'Put right')
+            print(f'Put right')
             x.right = self.put_(x.right, key, val)
         elif cmp > 0:
-            #print(f'Put left')
+            print(f'Put left')
             x.left = self.put_(x.left, key, val)
         # If keys are equal - Overwrite val
         else:
             x.val = val
-        x.count = self.size_(x.left) + self.size_(x.right) + 1
 
         return x
 
@@ -167,7 +170,7 @@ class BinarySearchTree:
         else:
             return self.max_(x.right)
 
-'''
+
 bst = BinarySearchTree()
 
 arr = np.array([3, 2, 4, 1, 2.5, 5])
@@ -188,4 +191,3 @@ print(f'BST Size: {bst.size()}')
 print(f'BST Min: {bst.min()}')
 print(f'BST Max: {bst.max()}')
 print(f'BST Keys: {bst.keys()}')
-'''

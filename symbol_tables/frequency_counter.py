@@ -68,7 +68,7 @@ lens = []
 ts = []
 ts_bst = []
 downsample = [64, 32, 16]
-tests = 100
+tests = 10
 
 for t in tqdm(np.arange(tests)):
     d = np.random.randint(200, 10000)
@@ -82,7 +82,7 @@ for t in tqdm(np.arange(tests)):
     #print(f'Len words: {len(words_downsample)}')
 
     time_start = time.time()
-    frequency_counter(words_downsample, st=NaiveSymbolTable)
+    frequency_counter(words_downsample, st=BinarySearchTree)
     time_stop = time.time()
     ts += [(time_stop-time_start) * 1000 ]
 
@@ -97,8 +97,8 @@ lens = np.array(lens)
 ts = np.array(ts)
 ts_bst = np.array(ts_bst)
 
-ts = (ts - np.percentile(ts, q=1)) / (np.percentile(ts, q=99) - np.percentile(ts, q=1))
-ts_bst = (ts_bst - np.percentile(ts_bst, q=1)) / (np.percentile(ts_bst, q=99) - np.percentile(ts_bst, q=1))
+#ts = (ts - np.percentile(ts, q=1)) / (np.percentile(ts, q=99) - np.percentile(ts, q=1))
+#ts_bst = (ts_bst - np.percentile(ts_bst, q=1)) / (np.percentile(ts_bst, q=99) - np.percentile(ts_bst, q=1))
 
 print(f'ts: {ts}')
 print(f'ts_bst: {ts_bst}')
