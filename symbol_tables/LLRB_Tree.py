@@ -74,7 +74,7 @@ class LLRBTree(BinarySearchTree):
             print(f'Rotating left')
             x = self.rotate_left(x)
 
-        if self.is_red(x.left) and self.is_red(x.left.left) == False:
+        if self.is_red(x.left) and self.is_red(x.left.left):
             print(f'Rotating right')
             x = self.rotate_right(x)
 
