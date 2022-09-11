@@ -41,6 +41,15 @@ class BinarySearchTree:
     root = None
     time_put = 0
     puts = 0
+
+    def depth(self):
+        return self.depth_(self.root)
+
+    def depth_(self, x):
+        if x is None:
+            return 1
+        
+        return np.max([self.depth_(x.left), self.depth_(x.right)]) + 1
     
     def size(self):
         return self.size_(self.root)
@@ -105,12 +114,12 @@ class BinarySearchTree:
         cmp = x.compare_to(key)
 
         # If x is less than key - Put left
-        print(f'Node key {x.key}, new key {key}, cmp {cmp}')
+        #print(f'Node key {x.key}, new key {key}, cmp {cmp}')
         if cmp < 0:
-            print(f'Put right')
+            #print(f'Put right')
             x.right = self.put_(x.right, key, val)
         elif cmp > 0:
-            print(f'Put left')
+            #print(f'Put left')
             x.left = self.put_(x.left, key, val)
         # If keys are equal - Overwrite val
         else:

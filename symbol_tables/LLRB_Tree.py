@@ -1,6 +1,6 @@
 # Left linked Red-Black tree
 from binary_search_tree import Node, BinarySearchTree
-
+from tqdm import tqdm
 import numpy as np
 
 
@@ -59,7 +59,7 @@ class LLRBTree(BinarySearchTree):
     def put(self, key, val):
         self.root = self.put_(self.root, key, val)
         self.root.color = 'black'
-        print(f'Put - Root: {self.root.to_string()}')
+        #print(f'Put - Root: {self.root.to_string()}')
 
     def put_(self, x, key, val):
 
@@ -71,27 +71,36 @@ class LLRBTree(BinarySearchTree):
         x.count = self.size_(x.left) + self.size_(x.right) + 1
 
         if self.is_red(x.right) and self.is_red(x.left) == False:
-            print(f'Rotating left')
+            #print(f'Rotating left')
             x = self.rotate_left(x)
 
         if self.is_red(x.left) and self.is_red(x.left.left):
-            print(f'Rotating right')
+            #print(f'Rotating right')
             x = self.rotate_right(x)
 
         if self.is_red(x.right) and self.is_red(x.left):
-            print(f'Flip')
+            #print(f'Flip')
             self.flip_colors(x)
-
-        
 
         return x
 
+'''
 llrbt = LLRBTree()
 
 arr = np.array([3, 4, 2])
+N = 10000
+arr = np.random.randint(0, N, N)
 
-for val, key in zip(arr, arr):
-    print(f'Key: {key}, val: {val}')
+for val, key in tqdm(zip(arr, arr)):
+    #print(f'Key: {key}, val: {val}')
 
     llrbt.put(key, val)
-    print(f'BST Valid? {llrbt.is_bst()}')
+    #print(f'BST Valid? {llrbt.is_bst()}')
+
+
+for val, key in tqdm(zip(arr, arr)):
+
+    val = llrbt.get(key)
+    assert key == val
+
+'''

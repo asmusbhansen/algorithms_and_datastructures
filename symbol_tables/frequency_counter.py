@@ -1,11 +1,28 @@
 from msilib.schema import Binary
 from naive_st import NaiveSymbolTable
 from binary_search_tree import BinarySearchTree
+from LLRB_Tree import LLRBTree
 import time
 import matplotlib.pyplot as plt
 import numpy as np
 import random
 from tqdm import tqdm
+
+def switch_list(l, N):
+
+    count = 0
+    while count < N:
+
+        idx1 = np.random.randint(0, len(l)-1)
+        idx2 = np.random.randint(0, len(l)-1)
+        if idx1 != idx2:
+            count += 1
+            l_temp = l[idx1]
+            l[idx1] = l[idx2]
+            l[idx2] = l_temp
+
+    return l
+
 
 def read_file(file_path):
 
@@ -56,7 +73,7 @@ def frequency_counter(words, st=None):
     #time_put = symbol_table.time_put
     #print(f'Max word: {max_key}, count: {max_val}')
     
-    #return time_put
+    return symbol_table.depth()
 
 file_location = r'C:\source/algorithms_and_datastructures/symbol_tables/'
 file_path = 'leipzig1M.txt'
@@ -64,15 +81,22 @@ file_path = 'leipzig1M.txt'
 words = read_file(file_location + file_path)
 words = [word for word in words if len(word) > 8]
 
+#random.shuffle(words)
+words.sort()
+
+#words = switch_list(words, len(words)*0.33)
+
 lens = []
 ts = []
 ts_bst = []
+ds = []
+ds_bst = []
 downsample = [64, 32, 16]
-tests = 10
+tests = 100
 
 for t in tqdm(np.arange(tests)):
-    d = np.random.randint(200, 10000)
-    #random.shuffle(words)
+    d = np.random.randint(50, 500)
+    
 
     words = words[1:] + words[:1]
 
@@ -82,15 +106,17 @@ for t in tqdm(np.arange(tests)):
     #print(f'Len words: {len(words_downsample)}')
 
     time_start = time.time()
-    frequency_counter(words_downsample, st=BinarySearchTree)
+    d = frequency_counter(words_downsample, st=LLRBTree)
     time_stop = time.time()
     ts += [(time_stop-time_start) * 1000 ]
+    ds += [d]
+    
 
     time_start = time.time()
-    frequency_counter(words_downsample, st=BinarySearchTree)
+    d = frequency_counter(words_downsample, st=BinarySearchTree)
     time_stop = time.time()
     ts_bst += [(time_stop-time_start) * 1000 ]
-
+    ds_bst += [d]
     lens +=[words_downsample_len]
 
 lens = np.array(lens)
@@ -104,10 +130,19 @@ print(f'ts: {ts}')
 print(f'ts_bst: {ts_bst}')
 
 plt.figure()
-plt.scatter(lens, ts, alpha=0.5, label='Naive')
+plt.scatter(lens, ts, alpha=0.5, label='Left leaning Red-Black Tree')
 plt.scatter(lens, ts_bst, alpha=0.5, label='Binary search tree')
 plt.legend()
-plt.yscale('log')
+#plt.yscale('log')
 plt.xlabel('N')
 plt.ylabel('Time')
+
+
+plt.figure()
+plt.scatter(lens, ds, alpha=0.5, label='Left leaning Red-Black Tree')
+plt.scatter(lens, ds_bst, alpha=0.5, label='Binary search tree')
+plt.legend()
+#plt.yscale('log')
+plt.xlabel('N')
+plt.ylabel('Depth')
 plt.show()
