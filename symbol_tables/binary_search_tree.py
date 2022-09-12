@@ -42,6 +42,9 @@ class BinarySearchTree:
     time_put = 0
     puts = 0
 
+    def __init__(self, node=Node):
+        self.node = Node
+
     def depth(self):
         return self.depth_(self.root)
 
@@ -179,7 +182,7 @@ class BinarySearchTree:
         else:
             return self.max_(x.right)
 
-
+'''
 bst = BinarySearchTree()
 
 arr = np.array([3, 2, 4, 1, 2.5, 5])
@@ -200,3 +203,4 @@ print(f'BST Size: {bst.size()}')
 print(f'BST Min: {bst.min()}')
 print(f'BST Max: {bst.max()}')
 print(f'BST Keys: {bst.keys()}')
+'''
