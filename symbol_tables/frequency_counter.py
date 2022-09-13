@@ -92,7 +92,7 @@ ts_bst = []
 ds = []
 ds_bst = []
 downsample = [64, 32, 16]
-tests = 100
+tests = 10
 
 for t in tqdm(np.arange(tests)):
     d = np.random.randint(50, 500)

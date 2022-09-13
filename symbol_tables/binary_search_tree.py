@@ -73,9 +73,7 @@ class BinarySearchTree:
             return None
 
         cmp = x.compare_to(key)
-
-        #print(f'Node key {x.key}, get key {key}, cmp: {cmp}')
-
+        
         # If x is less than key - Get left
         if cmp < 0:
             #print(f'Get right')
