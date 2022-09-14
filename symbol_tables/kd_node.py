@@ -26,14 +26,15 @@ class kDNode:
             
         k_idx = self.get_k_idx()
 
-        print(f'Comparing {self.key} to {key_other}, idx {k_idx}')
+        #print(f'Comparing {self.key} to {key_other}, idx {k_idx}')
 
         key_temp = self.key[k_idx]
         key_other_temp = key_other[k_idx]
 
-        # If keys are equal
+        # If keys are equal, either put right or return equal
         if np.all(np.equal(self.key, key_other)):
-            return 0
+            #return 0
+            return -1
         # If self key is less than input key - Put right 
         elif key_temp < key_other_temp:
             return -1
@@ -43,6 +44,16 @@ class kDNode:
         # Put left
         else:
             return 1
+
+    def in_range(self, key_min, key_max):
+
+        in_range = True
+        
+        for n, key_ in enumerate(self.key):
+            if key_min[n] > self.key[n] or key_max[n] < self.key[n]:
+                in_range = False
+                break
+        return in_range
 
     def to_string(self):
         
