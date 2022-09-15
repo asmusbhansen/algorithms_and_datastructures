@@ -77,8 +77,6 @@ class kdTree(BinarySearchTree):
             #print(f'Search match: {x.to_string()}')
             points += [x]
             
-
-
         #Check for maximum of search range
         cmp_max = x.compare_to(key_max)
 
@@ -107,15 +105,190 @@ class kdTree(BinarySearchTree):
 
         return points
 
+    def dist(self, key1, key2):
+        return np.sqrt(np.sum((key1 - key2)**2))
+
+    def update_current_best(self, key_node, search_key, current_best):
+        
+        if current_best is None:
+            #print(f'-- Current best updated from {current_best} to {key_node} --')
+            return key_node
+
+        if self.dist(search_key, key_node) < self.dist(search_key, current_best):
+            #print(f'- Current best updated from {current_best} to {key_node} --')
+            return key_node
+        else:
+            return current_best
+            
+    def nearest_neighbour(self, search_key):
+
+        current_best = None
+        #print(f'Searching for Nearest Neighbour to search key: {search_key}')
+        return self.nearest_neighbour_down(self.root, search_key, current_best, path=[])
+
+    def nearest_neighbour_down(self, x, search_key, current_best, path):
+
+        if x is None:
+            return current_best
+
+        path += [x]
+
+        cmp = x.compare_to(search_key)
+
+        #print(f'Down - Comparing node key {x.key} to search key {search_key}, idx {x.level%x.k}, cmp: {cmp}')
+
+        # If key is less - Go down left subtree
+        if cmp > 0:
+            current_best = self.nearest_neighbour_down(x.left, search_key, current_best, path)
+        
+        # If key is larger - Go down right subtree
+        elif cmp < 0:
+            current_best = self.nearest_neighbour_down(x.right, search_key, current_best, path)
+        # If key is equal - Update current best
+        else:
+            path = [] 
+
+        # Update current best
+        current_best = self.update_current_best(x.key, search_key, current_best)
+
+        # Go up the path
+        current_best = self.nearest_neighbour_up(search_key, current_best, path)
+
+        return current_best
+
+    def nearest_neighbour_up(self, search_key, current_best, path):
+        
+        if path == []:
+            return current_best
+
+        #print(f'Up path:')
+        #for p in path:
+        #    print(p.to_string())
+        
+        node = path[-1]
+
+        # If the distance between the current best and key is less than current best and splitting plane, there is no need to go down other three
+        key_idx = node.level % node.k
+        search_other = self.dist(current_best, search_key) > np.abs(node.key[key_idx] - search_key[key_idx])
+        #print(f'Search other: {self.dist(current_best, search_key)}, {np.abs(node.key[key_idx] - search_key[key_idx])}')
+
+        #print(f'Up - Comparing node key {node.key}, search key {search_key} and best {current_best}, idx {node.level%node.k}. Search other? {search_other}')
+
+        # Is current best in the left or right half of three?
+        cmp = node.compare_to(search_key)
+        #print(f'Up - cmp: {cmp}')
+        # Current best is in left
+        if cmp > 0:
+            if search_other:
+                #print(f'Up - Going down right')
+                current_best = self.nearest_neighbour_down(node.right, search_key, current_best, path=[])
+        # Current best is in Right
+        elif cmp < 0:
+            if search_other:
+                #print(f'Up - Going down left')
+                current_best = self.nearest_neighbour_down(node.left, search_key, current_best, path=[])
+
+        # Remove current node from path
+        path = path[:-1]
+        #print(f'Down - New path len: {len(path)}')
+
+        current_best = self.nearest_neighbour_up(search_key, current_best, path)
+
+        return current_best
+
+        
+        
+
+def find_min(arr, search_key):
+    diff = arr - search_key
+    dist = np.sqrt(np.sum(diff**2, axis=1))
+
+    dist_argmin = np.argmin(dist)
+
+    return arr[dist_argmin, :] 
+    
+
+#arr = np.array([[0, 1],
+#                [-1, 3],
+#                [1, 2]])
+'''
+arr = np.array([[6, 3],
+                [2, 8],
+                [9, 5],
+                [0, 5],
+                [1, 8],
+                [7, 3],
+                [0, 6],
+                [8, 2],
+                [9, 1],
+                [1, 3]])
+
+search_key = np.array([6, 9])
+'''
+arr = np.array([[8, 0],
+                [3, 2],
+                [6, 5],
+                [2, 2],
+                [3, 1],
+                [1, 8],
+                [9, 6],
+                [2, 5],
+                [2, 4],
+                [7, 3]])
+
+search_key = np.array([0, 5])
 
 
-#arr = [np.array([1, 1]),
-#       np.array([1, 3]),
-#       np.array([1, 2])]
+tests = 10
+dim = 2
+points = 100
 
-#key_min=np.array([0, 0])
-#key_max=np.array([10, 10])
+for t in tqdm(np.arange(tests)):
+    #print(f'\n\n ---- Test {t} ---- ')
+    arr = np.random.randint(0, points, size=(points, dim))
+    search_key = np.random.randint(0, points, dim)
 
+    #search_key = np.array([1,2.1])
+    true_find = find_min(arr, search_key)
+
+    # Nearest neighbour test
+    kd_tree = kdTree()
+
+    for val, key in zip(arr, arr):
+            
+            kd_tree.put(key, val)
+
+    search_find = kd_tree.nearest_neighbour(search_key)
+
+    true_dist = np.sqrt(np.mean((search_key-true_find)**2))
+    find_dist = np.sqrt(np.mean((search_key-search_find)**2))
+
+    success = find_dist <= true_dist 
+
+    #print(f'search_key: {search_key}')
+    #print(f'search_find: {search_find}, {find_dist}')
+    #print(f'true_find: {true_find}, {true_dist}')
+    
+
+    if True:#success == False:
+        #print(f'search_find: {search_find}')
+        #print(f'arr:\n{arr}')
+        plt.figure()
+        plt.scatter(arr[:,0], arr[:,1])
+        plt.scatter(search_key[0], search_key[1], label='Search key', s=200, alpha=0.3)
+        plt.scatter(true_find[0], true_find[1], label='True find', s=100, alpha=0.3)
+        plt.scatter(search_find[0], search_find[1], label='Search find', s=50)
+        plt.legend()
+
+        plt.ylim(-1,points+1)
+        plt.xlim(-1,points+1)
+        plt.title(f'Success {success}')
+    
+
+    assert success
+plt.show()
+# Range search test
+'''
 tests = 10
 min_num_points = 1000
 max_num_points = 100000
@@ -205,7 +378,9 @@ plt.legend()
 plt.xlabel('N')
 plt.ylabel('Time')
 plt.show()
+'''
 
+# kD Tree test
 '''
 tests = 1000
 
