@@ -238,18 +238,16 @@ arr = np.array([[8, 0],
 
 search_key = np.array([0, 5])
 
-
-tests = 10
+tests = 100
 dim = 2
-points = 100
+min_points = 10000
+max_points = 100000
+
+ts = []
+ts_naive = []
+ls = []
 
 for t in tqdm(np.arange(tests)):
-    #print(f'\n\n ---- Test {t} ---- ')
-    arr = np.random.randint(0, points, size=(points, dim))
-    search_key = np.random.randint(0, points, dim)
-
-    #search_key = np.array([1,2.1])
-    true_find = find_min(arr, search_key)
 
     # Nearest neighbour test
     kd_tree = kdTree()
@@ -258,7 +256,23 @@ for t in tqdm(np.arange(tests)):
             
             kd_tree.put(key, val)
 
+    #print(f'\n\n ---- Test {t} ---- ')
+    points = np.random.randint(min_points, max_points)
+    arr = np.random.uniform(0, 1, size=(points, dim))
+    search_key = np.random.uniform(0, 1, dim)
+
+    #search_key = np.array([1,2.1])
+
+    time_start = time.time()
+    true_find = find_min(arr, search_key)
+    ts_naive += [time.time() - time_start]
+    
+
+    time_start = time.time()
     search_find = kd_tree.nearest_neighbour(search_key)
+    ts += [time.time() - time_start]
+    ls += [points]
+    
 
     true_dist = np.sqrt(np.mean((search_key-true_find)**2))
     find_dist = np.sqrt(np.mean((search_key-search_find)**2))
@@ -270,7 +284,7 @@ for t in tqdm(np.arange(tests)):
     #print(f'true_find: {true_find}, {true_dist}')
     
 
-    if True:#success == False:
+    if False:#success == False:
         #print(f'search_find: {search_find}')
         #print(f'arr:\n{arr}')
         plt.figure()
@@ -280,13 +294,23 @@ for t in tqdm(np.arange(tests)):
         plt.scatter(search_find[0], search_find[1], label='Search find', s=50)
         plt.legend()
 
-        plt.ylim(-1,points+1)
-        plt.xlim(-1,points+1)
+        plt.ylim(-0.1,1.1)
+        plt.xlim(-0.1,1.1)
         plt.title(f'Success {success}')
-    
+        plt.show()    
 
     assert success
+
+
+plt.figure()
+plt.scatter(ls, ts_naive, alpha=0.1, label='Naive Nearest Neighbour')
+plt.scatter(ls, ts, alpha=0.1, label='kD Tree Nearest Neighbour')
+plt.legend()
+plt.xlabel('N')
+plt.ylabel('Time')
+#plt.yscale('log')
 plt.show()
+
 # Range search test
 '''
 tests = 10
