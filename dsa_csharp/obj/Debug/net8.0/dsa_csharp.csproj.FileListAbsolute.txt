@@ -1,0 +1,15 @@
+c:\source\algorithms_and_datastructures\dsa_csharp\bin\Debug\net8.0\dsa_csharp.exe
+c:\source\algorithms_and_datastructures\dsa_csharp\bin\Debug\net8.0\dsa_csharp.deps.json
+c:\source\algorithms_and_datastructures\dsa_csharp\bin\Debug\net8.0\dsa_csharp.runtimeconfig.json
+c:\source\algorithms_and_datastructures\dsa_csharp\bin\Debug\net8.0\dsa_csharp.dll
+c:\source\algorithms_and_datastructures\dsa_csharp\bin\Debug\net8.0\dsa_csharp.pdb
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\dsa_csharp.GeneratedMSBuildEditorConfig.editorconfig
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\dsa_csharp.AssemblyInfoInputs.cache
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\dsa_csharp.AssemblyInfo.cs
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\dsa_csharp.csproj.CoreCompileInputs.cache
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\dsa_csharp.sourcelink.json
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\dsa_csharp.dll
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\refint\dsa_csharp.dll
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\dsa_csharp.pdb
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\dsa_csharp.genruntimeconfig.cache
+c:\source\algorithms_and_datastructures\dsa_csharp\obj\Debug\net8.0\ref\dsa_csharp.dll
