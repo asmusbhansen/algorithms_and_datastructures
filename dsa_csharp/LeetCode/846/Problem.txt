@@ -1,3 +1,5 @@
+Problem Statement
+
 Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size groupSize, and consists of groupSize consecutive cards.
 
 Given an integer array hand where hand[i] is the value written on the ith card and an integer groupSize, return true if she can rearrange the cards, or false otherwise.
@@ -18,3 +20,8 @@ Constraints:
 1 <= hand.length <= 104
 0 <= hand[i] <= 109
 1 <= groupSize <= hand.length
+
+Problem Solution Complexity
+
+A Binary Search tree is used to count frequency of the different cards. Hence we do worst-case n insertions time complexity for building the BST is O(nlogn)
+Inorder traversal of the binary tree is O(n) so total time complexity is O(n)+O(nlogn) => O(nlogn)

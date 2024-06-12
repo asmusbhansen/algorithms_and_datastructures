@@ -1,3 +1,4 @@
-﻿using DsaCsharp.LeetCode.EightFourSix;
+﻿using DsaCsharp.LeetCode.SevenFive;
 
-EightFourSixSolution.Test();
+SevenFiveSolution sevenFiveSolution = new SevenFiveSolution();
+sevenFiveSolution.Test();
